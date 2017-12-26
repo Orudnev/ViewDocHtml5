@@ -1,0 +1,20 @@
+.loginForm-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.panel-body
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.loginForm{
+    max-width: 50%;
+}
+
+
