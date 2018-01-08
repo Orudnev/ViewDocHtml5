@@ -9,8 +9,12 @@ render() {
     return(
 <div className="pull-right">
     <div className="material-switch ">
-        <span className="labelDlg chbLabelPadding">blablablbalyyyy</span>
-        <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox"/>
+        <span className="labelDlg chbLabelPadding">{this.props.caption}</span>
+        <input 
+            id="someSwitchOptionDefault"  type="checkbox" 
+            defaultChecked={this.props.checked}
+            onChange={this.props.onChange}
+            />
         <label htmlFor="someSwitchOptionDefault" className="label-primary"></label>
     </div>    
 </div>    

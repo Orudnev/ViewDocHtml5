@@ -4,10 +4,24 @@ import '../common.css';
 import './Login.css';
 import locale from '../Locale.js';
 import Checkbox from '../components/CheckBox.jsx';
+import ut from '../utils/Cutil.js';
 
 class Login extends Component {
 
-    
+    constructor(){
+        super();
+        this.appSet = ut.pStorage.getAppSettings();
+        this.state = {
+            user:this.appSet.user,
+            password:this.appSet.password,
+            rememberCredentials:true,
+            btnSubmitDisabled:!this.appSet.user || !this.appSet.password
+        }
+        this.handleChangeRCred = this.handleChangeRCred.bind(this);
+        this.handleChangeText = this.handleChangeText.bind(this);
+        this.setCtrlState = this.setCtrlState.bind(this);
+        console.log(ut.pStorage);
+    }
 
     /*
     onSubmit = event => {
@@ -19,6 +33,22 @@ class Login extends Component {
         });
     };
     */
+    handleChangeRCred(event){
+        this.setState({
+            rememberCredentials:event.target.checked
+        });
+    }
+
+    handleChangeText(event){
+        let dataField = event.target.getAttribute('datafield');
+        let jsonStr = `{"${dataField}":"${event.target.value}"}`;
+        let newValue = JSON.parse(jsonStr);
+        this.setState(newValue,this.setCtrlState);
+    }
+    setCtrlState(){
+        this.setState({btnSubmitDisabled: !this.state.user || !this.state.password});
+    }
+
     
     render() {
         return (
@@ -37,23 +67,28 @@ class Login extends Component {
                                 <label className="labelDlg" >{locale.loginPage_UserName}</label>
                                 <input className="pull-right"
                                     type="text"
-                                    name="username"
-                                    ref={input => this.usernameInput = input} />
+                                    datafield="user"
+                                    onChange={this.handleChangeText}
+                                    value={this.state.user} />
                             </div>    
                             <div className="form-group ">
                                 <div >
                                 <label className="labelDlg" >{locale.loginPage_Password}</label>
                                     <input className="pull-right"
                                         type="password"
-                                        name="password"
-                                        ref={input => this.passwordInput = input} />
+                                        datafield="password"
+                                        onChange={this.handleChangeText}
+                                        value={this.state.password} />
                                 </div>
                             </div>
                             <div className="form-group ">
-                                <Checkbox />
+                                <Checkbox caption={locale.loginPage_RememberCredentials} 
+                                checked={this.state.rememberCredentials}
+                                onChange={this.handleChangeRCred}
+                                 />
                             </div>    
                             <div className="form-group ">
-                                <button type="submit" className="btn btn-primary btn-xs pull-right " disabled={true} >
+                                <button type="submit" className="btn btn-primary btn-xs pull-right " disabled={this.state.btnSubmitDisabled} >
                                     {locale.loginPage_ConnectToServer}
                                 </button>
                             </div>

@@ -6,6 +6,13 @@ import Content from './components/Content';
 import NotFound from './pages/NotFound';
 
 class App extends Component {
+    constructor(){
+        super();
+        this.state = {
+            
+        }
+    }
+
     render() {
         return (
             <div className="app">
