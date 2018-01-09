@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../common.css';
 import './Login.css';
@@ -6,7 +7,7 @@ import locale from '../Locale.js';
 import Checkbox from '../components/CheckBox.jsx';
 import ut from '../utils/Cutil.js';
 
-class Login extends Component {
+class Login extends React.Component {
 
     constructor(){
         super();
@@ -14,7 +15,7 @@ class Login extends Component {
         this.state = {
             user:this.appSet.user,
             password:this.appSet.password,
-            rememberCredentials:true,
+            rememberCredentials:this.appSet.rememberCredentials,
             btnSubmitDisabled:!this.appSet.user || !this.appSet.password
         }
         this.handleChangeRCred = this.handleChangeRCred.bind(this);
@@ -23,16 +24,6 @@ class Login extends Component {
         console.log(ut.pStorage);
     }
 
-    /*
-    onSubmit = event => {
-        event.preventDefault();
-
-        this.props.onLogin({
-            username: this.usernameInput.value,
-            password: this.passwordInput.value
-        });
-    };
-    */
     handleChangeRCred(event){
         this.setState({
             rememberCredentials:event.target.checked
@@ -48,6 +39,16 @@ class Login extends Component {
     setCtrlState(){
         this.setState({btnSubmitDisabled: !this.state.user || !this.state.password});
     }
+
+    handleClick = event => {
+        event.preventDefault();
+        this.appSet.rememberCredentials = this.state.rememberCredentials;
+        this.appSet.user = this.state.user;
+        this.appSet.password = this.state.password;
+        ut.pStorage.setAppSettings(this.appSet);
+        this.props.history.push('/blablabla/vvv');
+    }
+
 
     
     render() {
@@ -88,8 +89,11 @@ class Login extends Component {
                                  />
                             </div>    
                             <div className="form-group ">
-                                <button type="submit" className="btn btn-primary btn-xs pull-right " disabled={this.state.btnSubmitDisabled} >
-                                    {locale.loginPage_ConnectToServer}
+                                <button type="submit" className="btn btn-primary btn-xs pull-right " 
+                                        disabled={this.state.btnSubmitDisabled}
+                                        onClick={this.handleClick} 
+                                        >
+                                        {locale.loginPage_ConnectToServer}
                                 </button>
                             </div>
                         </div>    
