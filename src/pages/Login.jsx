@@ -46,7 +46,7 @@ class Login extends React.Component {
         this.appSet.user = this.state.user;
         this.appSet.password = this.state.password;
         ut.pStorage.setAppSettings(this.appSet);
-        this.props.history.push('/blablabla/vvv');
+        this.props.history.push('/selectDD');
     }
 
 
