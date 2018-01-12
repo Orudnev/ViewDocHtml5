@@ -23,7 +23,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" component={Login} />
                         <Route path="/login" render={props => <Login onLogin={this.login} />} />
-                        <Route path="/selectDD" render={props => <SelectDD onLogin={this.login} />} />
+                        <Route path="/selectDD" component={SelectDD} />} />
                         <Route component={NotFound} />
                     </Switch>
                 </Content>

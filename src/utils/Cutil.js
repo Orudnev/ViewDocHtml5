@@ -12,7 +12,9 @@ class PStorage{
                 defaultData:{
                     user : '',
                     password :'',
-                    rememberCredentials : false
+                    rememberCredentials : false,
+                    Dsn:'Demoo',
+                    sessionId:''
                 }    
             }
         }        

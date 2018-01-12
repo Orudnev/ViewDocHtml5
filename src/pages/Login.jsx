@@ -21,7 +21,6 @@ class Login extends React.Component {
         this.handleChangeRCred = this.handleChangeRCred.bind(this);
         this.handleChangeText = this.handleChangeText.bind(this);
         this.setCtrlState = this.setCtrlState.bind(this);
-        console.log(ut.pStorage);
     }
 
     handleChangeRCred(event){
@@ -46,7 +45,7 @@ class Login extends React.Component {
         this.appSet.user = this.state.user;
         this.appSet.password = this.state.password;
         ut.pStorage.setAppSettings(this.appSet);
-        this.props.history.push('/selectDD');
+        this.props.history.push('/selectDD');        
     }
 
 

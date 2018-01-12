@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
+import ReactDataGrid from 'react-data-grid';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../common.css';
 import './SelectDD.css';
 import locale from '../Locale.js';
 import ut from '../utils/Cutil.js';
+import soapWrapper from '../utils/SoapWrapper';
 
 class SelectDD extends React.Component {
 
@@ -12,43 +14,75 @@ class SelectDD extends React.Component {
         super();
         this.appSet = ut.pStorage.getAppSettings();
         this.state = {
-            user:this.appSet.user,
-            password:this.appSet.password,
-            rememberCredentials:this.appSet.rememberCredentials,
-            btnSubmitDisabled:!this.appSet.user || !this.appSet.password
+            dsnList:[],
+            selectedDsn:'',
+            waitResonse:false
         }
-        this.handleChangeRCred = this.handleChangeRCred.bind(this);
-        this.handleChangeText = this.handleChangeText.bind(this);
-        this.setCtrlState = this.setCtrlState.bind(this);
-        console.log(ut.pStorage);
+        this.rowGetter = this.rowGetter.bind(this);
+        this.onDsnListRetrived = this.onDsnListRetrived.bind(this);
+        this.onDsnSelected = this.onDsnSelected.bind(this);
+        this.handleBtnOkClick = this.handleBtnOkClick.bind(this);
+        this.hanleBtnCancelClick = this.hanleBtnCancelClick.bind(this);
+        this.onLoginResponse = this.onLoginResponse.bind(this);
+        
+        soapWrapper.df_GetMyDSNs('sysdba',this.onDsnListRetrived);
     }
 
-    handleChangeRCred(event){
-        this.setState({
-            rememberCredentials:event.target.checked
-        });
+    onDsnListRetrived(bresult,data){
+        if (!bresult){
+            this.onError(data);
+            return;
+        }
+        for(let i=0;i<data.length;i++){
+            if (data[i].Name==this.appSet.Dsn){
+                data[i].isSelected = true;
+                this.setState({selectedDsn:data[i].Name})   
+                break;
+            }
+        }
+        this.setState({dsnList:data});
     }
 
-    handleChangeText(event){
-        let dataField = event.target.getAttribute('datafield');
-        let jsonStr = `{"${dataField}":"${event.target.value}"}`;
-        let newValue = JSON.parse(jsonStr);
-        this.setState(newValue,this.setCtrlState);
-    }
-    setCtrlState(){
-        this.setState({btnSubmitDisabled: !this.state.user || !this.state.password});
+    onError(data){
+        console.log(data);
     }
 
-    handleClick = event => {
-        event.preventDefault();
-        this.appSet.rememberCredentials = this.state.rememberCredentials;
-        this.appSet.user = this.state.user;
-        this.appSet.password = this.state.password;
+    onDsnSelected(rowCol){
+        let rowIndex = rowCol.rowIdx;
+        for (let i=0;i<this.state.dsnList.length;i++){
+            this.state.dsnList[i].isSelected = (i==rowIndex);
+        }
+        this.setState({selectedDsn:this.state.dsnList[rowIndex].Name}); 
+    }
+
+    handleBtnOkClick(){
+        this.setState({waitResonse:true});
+        this.appSet.Dsn = this.state.selectedDsn;
         ut.pStorage.setAppSettings(this.appSet);
-        this.props.history.push('/blablabla/vvv');
+        soapWrapper.df_Login(this.appSet.user,this.appSet.password,this.appSet.Dsn,this.onLoginResponse)
     }
 
+    onLoginResponse(bresult,data){
+         if (!bresult){
+            this.onError(data);
+            return;
+        }
+        this.appSet.sessionId=data.sessionId;
+        ut.pStorage.setAppSettings(this.appSet);
+    }
 
+    hanleBtnCancelClick(event){
+        this.props.history.goBack();
+    }
+    
+    
+    rowGetter(rowIndex){
+        let result = {Name:""}; //default value
+        if(this.state.dsnList[rowIndex]){
+            result = this.state.dsnList[rowIndex];
+        }
+        return result;
+    }
     
     render() {
         return (
@@ -61,47 +95,36 @@ class SelectDD extends React.Component {
                         {locale.SelectDsn_Title}
                     </h3>
                     <div className="">
-                        <button className="btn btn-success btn-xs glyphicon glyphicon-ok marginR5px">
+                        <button className="btn btn-success btn-xs glyphicon glyphicon-ok marginR5px"
+                                disabled={!this.state.selectedDsn||this.state.waitResonse}
+                                onClick={this.handleBtnOkClick}>
                         </button>
                     </div>
                     <div className="">
-                        <button className="btn btn-danger btn-xs glyphicon glyphicon-remove">
+                        <button className="btn btn-danger btn-xs glyphicon glyphicon-remove"
+                                onClick={this.hanleBtnCancelClick}>
                         </button>
                     </div>
                     </div>
                 </div>
                 <div className="panel-body ">
                     <form onSubmit={this.onSubmit} className="pageBody-Container">
-                        <div id="loginForm" className="panel panel-primary ">
-                            <div className="panel-body">
-                                <div className="form-group">
-                                    <label className="labelDlg" >{locale.loginPage_UserName}</label>
-                                    <input className="pull-right"
-                                        type="text"
-                                        datafield="user"
-                                        onChange={this.handleChangeText}
-                                        value={this.state.user} />
-                                </div>    
-                                <div className="form-group ">
-                                    <div >
-                                    <label className="labelDlg" >{locale.loginPage_Password}</label>
-                                        <input className="pull-right"
-                                            type="password"
-                                            datafield="password"
-                                            onChange={this.handleChangeText}
-                                            value={this.state.password} />
-                                    </div>
-                                </div>
-                                <div className="form-group ">
-                                    <button type="submit" className="btn btn-primary btn-xs pull-right " 
-                                            disabled={this.state.btnSubmitDisabled}
-                                            onClick={this.handleClick} 
-                                            >
-                                            {locale.loginPage_ConnectToServer}
-                                    </button>
-                                </div>
-                            </div>    
-                        </div>
+                        <ReactDataGrid 
+                            columns={[{key:'Name',name:'DSN'}]}
+                            rowGetter={this.rowGetter}
+                            rowsCount={this.state.dsnList.length}
+                            minHeight={300} 
+                            rowSelection={
+                                {
+                                    showCheckbox:false,
+                                    selectBy: {
+                                        isSelectedKey:'isSelected'
+                                    }
+                                }
+                            }
+                            onCellSelected={this.onDsnSelected}
+                            />
+
                     </form>
                 </div>    
             </div>    

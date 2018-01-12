@@ -41,7 +41,14 @@ class SoapWrapper {
     getDataFromSoapResponse(strSoapResponse){
         var xmldoc=new DOMParser().parseFromString(strSoapResponse,"text/xml");    
         var returnNodes =  xmldoc.getElementsByTagName("return");
+        var faultStringNodes = xmldoc.getElementsByTagName("faultstring");
         var resultObj;
+        if (faultStringNodes.length>0){
+            let errorStr = faultStringNodes[0].textContent;
+            resultObj = {error:errorStr,strSoapResponse:strSoapResponse};
+            return resultObj;
+        }
+        
         var simpleParse = (node,outObject) => outObject[node.tagName] = node.textContent;
         var scanNodes = function(node,currObj){
             for (var child of node.children){
@@ -78,11 +85,12 @@ class SoapWrapper {
         axios.defaults.headers.post['Content-Type'] = 'text/xml';
         axios.post('/DFStorageServer',strXmlSoap)
         .then(response => {
-            window.myresponse = response.data; //to be remove
             var data = this.getDataFromSoapResponse(response.data);
-            handler(true,data);
+            var isOK = !data.hasOwnProperty('error');
+            handler(isOK,data);
         })
         .catch(error=> {
+            console.error('SoapWrapperError:')
             console.error(error);
             handler(false,error);    
         });
@@ -94,7 +102,6 @@ class SoapWrapper {
     }
 
     df_GetMyDSNs(userName,handler){
-        console.log('df_GetMyDSNs');
         let strXmlSoap = this.getSoap('GetMyDSNs',{UserName:userName});
         this.doSoapRequest(handler,strXmlSoap);
     }
