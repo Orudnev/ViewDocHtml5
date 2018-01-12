@@ -12,6 +12,7 @@ class SelectDD extends React.Component {
 
     constructor(){
         super();
+        this.historyObj = null;
         this.appSet = ut.pStorage.getAppSettings();
         this.state = {
             dsnList:[],
@@ -24,6 +25,7 @@ class SelectDD extends React.Component {
         this.handleBtnOkClick = this.handleBtnOkClick.bind(this);
         this.hanleBtnCancelClick = this.hanleBtnCancelClick.bind(this);
         this.onLoginResponse = this.onLoginResponse.bind(this);
+        this.onError = this.onError.bind(this);
         
         soapWrapper.df_GetMyDSNs('sysdba',this.onDsnListRetrived);
     }
@@ -44,7 +46,9 @@ class SelectDD extends React.Component {
     }
 
     onError(data){
-        console.log(data);
+        console.log(this.props);
+        this.props.setLastErr(data);
+        this.historyObj.push('/error');  
     }
 
     onDsnSelected(rowCol){
@@ -72,7 +76,7 @@ class SelectDD extends React.Component {
     }
 
     hanleBtnCancelClick(event){
-        this.props.history.goBack();
+        this.historyObj.goBack();
     }
     
     
@@ -85,6 +89,7 @@ class SelectDD extends React.Component {
     }
     
     render() {
+        this.historyObj = this.props.pr.history;
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">

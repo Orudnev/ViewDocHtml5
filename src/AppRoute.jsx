@@ -4,13 +4,20 @@ import Login from './pages/Login';
 import SelectDD from './pages/SelectDD';
 import Content from './components/Content';
 import NotFound from './pages/NotFound';
+import Error from './pages/Error';
 
 class App extends Component {
     constructor(){
         super();
+        this.lastError = null;
         this.state = {
-            
         }
+        this.setLastError = this.setLastError.bind(this);
+
+    }
+
+    setLastError(err){
+        this.lastError = err;
     }
 
     render() {
@@ -23,7 +30,8 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" component={Login} />
                         <Route path="/login" render={props => <Login onLogin={this.login} />} />
-                        <Route path="/selectDD" component={SelectDD} />} />
+                        <Route path="/selectDD" render={props => <SelectDD pr={props} setLastErr={this.setLastError} />} />
+                        <Route path="/error" render={props => <Error pr={props} lastErr={this.lastError} />} />
                         <Route component={NotFound} />
                     </Switch>
                 </Content>

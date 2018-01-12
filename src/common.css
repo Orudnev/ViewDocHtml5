@@ -21,6 +21,15 @@ display: inline;
     vertical-align: baseline;
 }
 
+.hide{
+    width: 0px;
+    height: 0px;
+    visibility: hidden;
+}
+
+.dispBlock{
+    display: block;
+}
 .marginR1em{
     margin-right: 1em;
 }
