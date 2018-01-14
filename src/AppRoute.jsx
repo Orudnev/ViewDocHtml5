@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
+import Enum from './utils/Enum';
 import Login from './pages/Login';
 import SelectDD from './pages/SelectDD';
 import Content from './components/Content';
 import NotFound from './pages/NotFound';
+import DFArea from './pages/DFArea';
 import Error from './pages/Error';
 
 class App extends Component {
@@ -28,10 +30,11 @@ class App extends Component {
                     <Route path="/books"  component={Login}  />
 
                     <Switch>
-                        <Route exact path="/" component={Login} />
-                        <Route path="/login" render={props => <Login onLogin={this.login} />} />
-                        <Route path="/selectDD" render={props => <SelectDD pr={props} setLastErr={this.setLastError} />} />
-                        <Route path="/error" render={props => <Error pr={props} lastErr={this.lastError} />} />
+                        <Route exact path={Enum.routes.root} component={Login} />
+                        <Route path={Enum.routes.pgLogin} render={props => <Login onLogin={this.login} />} />
+                        <Route path={Enum.routes.pgSelectDD} render={props => <SelectDD pr={props} setLastErr={this.setLastError} />} />
+                        <Route path={Enum.routes.pgDfArea} render={props => <DFArea pr={props} lastErr={this.lastError} />} />
+                        <Route path={Enum.routes.pgError} render={props => <Error pr={props} lastErr={this.lastError} />} />
                         <Route component={NotFound} />
                     </Switch>
                 </Content>

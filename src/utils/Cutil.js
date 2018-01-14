@@ -13,7 +13,7 @@ class PStorage{
                     user : '',
                     password :'',
                     rememberCredentials : false,
-                    Dsn:'Demoo',
+                    Dsn:'',
                     sessionId:''
                 }    
             }

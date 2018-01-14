@@ -9,41 +9,18 @@ import locale from '../Locale.js';
 import ut from '../utils/Cutil.js';
 import soapWrapper from '../utils/SoapWrapper';
 
-class SelectDD extends React.Component {
+class DFArea extends React.Component {
 
     constructor(){
         super();
         this.historyObj = null;
         this.appSet = ut.pStorage.getAppSettings();
         this.state = {
-            dsnList:[],
-            selectedDsn:'',
-            waitResonse:false
         }
         this.rowGetter = this.rowGetter.bind(this);
-        this.onDsnListRetrived = this.onDsnListRetrived.bind(this);
-        this.onDsnSelected = this.onDsnSelected.bind(this);
         this.handleBtnOkClick = this.handleBtnOkClick.bind(this);
         this.hanleBtnCancelClick = this.hanleBtnCancelClick.bind(this);
-        this.onLoginResponse = this.onLoginResponse.bind(this);
-        this.onError = this.onError.bind(this);
-        
-        soapWrapper.df_GetMyDSNs(ut.pStorage.getAppSettings()[Enum.appSet.user],this.onDsnListRetrived);
-    }
-
-    onDsnListRetrived(bresult,data){
-        if (!bresult){
-            this.onError(data);
-            return;
-        }
-        for(let i=0;i<data.length;i++){
-            if (data[i].Name==this.appSet.Dsn){
-                data[i].isSelected = true;
-                this.setState({selectedDsn:data[i].Name})   
-                break;
-            }
-        }
-        this.setState({dsnList:data});
+        //soapWrapper.df_GetMyDSNs(ut.pStorage.getAppSettings()[Enum.appSet.user],this.onDsnListRetrived);
     }
 
     onError(data){
@@ -52,13 +29,6 @@ class SelectDD extends React.Component {
         this.historyObj.push(Enum.routes.pgError);  
     }
 
-    onDsnSelected(rowCol){
-        let rowIndex = rowCol.rowIdx;
-        for (let i=0;i<this.state.dsnList.length;i++){
-            this.state.dsnList[i].isSelected = (i==rowIndex);
-        }
-        this.setState({selectedDsn:this.state.dsnList[rowIndex].Name}); 
-    }
 
     handleBtnOkClick(){
         this.setState({waitResonse:true});
@@ -67,20 +37,9 @@ class SelectDD extends React.Component {
         soapWrapper.df_Login(this.appSet.user,this.appSet.password,this.appSet.Dsn,this.onLoginResponse)
     }
 
-    onLoginResponse(bresult,data){
-         if (!bresult){
-            this.onError(data);
-            return;
-        } 
-        this.appSet.sessionId=data.sessionId;
-        ut.pStorage.setAppSettings(this.appSet);
-        this.historyObj.push(Enum.routes.pgDfArea); 
-    }
-
     hanleBtnCancelClick(event){
         this.historyObj.goBack();
     }
-    
     
     rowGetter(rowIndex){
         let result = {Name:""}; //default value
@@ -99,7 +58,7 @@ class SelectDD extends React.Component {
                     <h3 className="panel-title marginRA">
                         <span className="marginR1em glyphicon glyphicon-th-list">
                         </span>
-                        {locale.SelectDsn_Title}
+                        TODO: path control
                     </h3>
                     <div className="">
                         <button className="btn btn-success btn-xs glyphicon glyphicon-ok marginR5px"
@@ -115,28 +74,11 @@ class SelectDD extends React.Component {
                     </div>
                 </div>
                 <div className="panel-body ">
-                    <form onSubmit={this.onSubmit} className="pageBody-Container">
-                        <ReactDataGrid 
-                            columns={[{key:'Name',name:'DSN'}]}
-                            rowGetter={this.rowGetter}
-                            rowsCount={this.state.dsnList.length}
-                            minHeight={300} 
-                            rowSelection={
-                                {
-                                    showCheckbox:false,
-                                    selectBy: {
-                                        isSelectedKey:'isSelected'
-                                    }
-                                }
-                            }
-                            onCellSelected={this.onDsnSelected}
-                            />
-
-                    </form>
+                    <img src="DWCM/image/DirIcons/folderC_red.svg" />
                 </div>    
             </div>    
         );
     }
 }
 
-export default SelectDD;
+export default DFArea;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.css';
+import Enum from '../utils/Enum';
 import '../common.css';
 import './Login.css';
 import locale from '../Locale.js';
@@ -45,7 +46,7 @@ class Login extends React.Component {
         this.appSet.user = this.state.user;
         this.appSet.password = this.state.password;
         ut.pStorage.setAppSettings(this.appSet);
-        this.props.history.push('/selectDD');        
+        this.props.history.push(Enum.routes.pgSelectDD);        
     }
 
 
