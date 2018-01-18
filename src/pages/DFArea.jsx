@@ -8,6 +8,7 @@ import './SelectDD.css';
 import locale from '../Locale.js';
 import ut from '../utils/Cutil.js';
 import soapWrapper from '../utils/SoapWrapper';
+import dirTest from '../image/diricons/test.svg';
 
 class DFArea extends React.Component {
 
@@ -74,7 +75,7 @@ class DFArea extends React.Component {
                     </div>
                 </div>
                 <div className="panel-body ">
-                    <img src="DWCM/image/DirIcons/folderC_red.svg" />
+                    <img src={dirTest} />
                 </div>    
             </div>    
         );
