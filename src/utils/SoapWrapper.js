@@ -38,7 +38,7 @@ class SoapWrapper {
         return rv;
     }
 
-    getDataFromSoapResponse(strSoapResponse){
+    getDataFromSoapResponse(strSoapResponse,specialParseHandler){
         var xmldoc=new DOMParser().parseFromString(strSoapResponse,"text/xml");    
         var returnNodes =  xmldoc.getElementsByTagName("return");
         var faultStringNodes = xmldoc.getElementsByTagName("faultstring");
@@ -72,20 +72,26 @@ class SoapWrapper {
             var returnNode = returnNodes[i];
             if (returnNodes.length==1)
             {
-                scanNodes(returnNode,resultObj);
+                if(specialParseHandler)
+                    specialParseHandler(returnNode,resultObj);                 
+                else
+                    scanNodes(returnNode,resultObj);
             }else{
                 resultObj.push({});
-                scanNodes(returnNode,resultObj[resultObj.length-1]);
+                if(specialParseHandler)
+                    specialParseHandler(returnNode,resultObj[resultObj.length-1]);    
+                else
+                    scanNodes(returnNode,resultObj[resultObj.length-1]);
             }
         }
         return resultObj;
     }
 
-    doSoapRequest(handler,strXmlSoap){
+    doSoapRequest(handler,strXmlSoap,specialResponseHandler){
         axios.defaults.headers.post['Content-Type'] = 'text/xml';
         axios.post('/DFStorageServer',strXmlSoap)
         .then(response => {
-            var data = this.getDataFromSoapResponse(response.data);
+            var data = this.getDataFromSoapResponse(response.data,specialResponseHandler);
             var isOK = !data.hasOwnProperty('error');
             handler(isOK,data);
         })
@@ -104,6 +110,31 @@ class SoapWrapper {
     df_GetMyDSNs(userName,handler){
         let strXmlSoap = this.getSoap('GetMyDSNs',{UserName:userName});
         this.doSoapRequest(handler,strXmlSoap);
+    }
+
+    df_GetAreaMembers(sessionID,rootAreaId,handler){
+        let strXmlSoap = this.getSoap('Directory_GetSnapshot',{SessionId:sessionID,Parent:rootAreaId});
+        this.doSoapRequest(handler,strXmlSoap,function(node,outObject){
+            outObject.areas = [];
+            outObject.volumes = [];
+            var xmldoc=new DOMParser().parseFromString(node.textContent,"text/xml");
+            var areaNodes =  xmldoc.getElementsByTagName("Area");
+            var volumeNodes =  xmldoc.getElementsByTagName("Dir");
+            for (var i=0; i<areaNodes.length; i++){
+                var node = areaNodes[i];
+                var newItem = {Name: node.getAttribute('Name'),Id: node.getAttribute('ID')};
+                outObject.areas.push(newItem);
+            }
+            for (var i=0; i<volumeNodes.length; i++){
+                var node = volumeNodes[i];
+                var newItem = {
+                    Name: node.getAttribute('Name'),
+                    Id: node.getAttribute('ID'),
+                    Icon: node.getAttribute('Icon')
+                };
+                outObject.volumes.push(newItem);
+            }
+        });
     }
 
     

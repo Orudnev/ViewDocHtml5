@@ -74,7 +74,8 @@ class SelectDD extends React.Component {
         } 
         this.appSet.sessionId=data.sessionId;
         ut.pStorage.setAppSettings(this.appSet);
-        this.historyObj.push(Enum.routes.pgDfArea); 
+        this.props.app.appMessage(Enum.messages.LoginOk);
+        //this.historyObj.push(Enum.routes.pgDfArea); 
     }
 
     hanleBtnCancelClick(event){

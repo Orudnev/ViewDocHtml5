@@ -1,10 +1,13 @@
 var Enum = {
+    lstor: {
+        AppSettings: 'AppSettings'
+    },
     routes : {
         root: '/',
         pgLogin:'/login',
         pgSelectDD:'/selectDD',
         pgError:'/error',
-        pgDfArea:'/dfArea',
+        pgDfArea:'/dfArea/:rootArea',
         pgDFroot:'' 
     },
     appSet : {
@@ -13,6 +16,9 @@ var Enum = {
         rememberCredentials : 'rememberCredentials',
         Dsn:'Dsn',
         sessionId:'sessionId'
+    },
+    messages:{
+        LoginOk:'LoginOk'
     }
 }
 

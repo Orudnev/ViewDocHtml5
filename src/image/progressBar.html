@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <body> 
+    <div id="initialLoadingPbar"> <!-- ProgressBar Begin -->
+        <style>
+            .pageLoading {
+                background: #A1C969; /*-- Color of the bar --*/
+                height: 15px;
+                max-width: 100%;
+                float: left;
+            }
+            .pgLoadAnim1 {
+                animation: plAnim1 120s forwards;
+            }
+            .pgLoadAnim2 {
+                animation: plAnim2 0.1s forwards;
+            }
+            
+            @keyframes plAnim1 { 
+                to { width: 90% }
+            }
+            @keyframes plAnim2 {
+                from {width:90% }
+                to { width: 100% }
+            }
+
+        </style>
+        <script>
+            (function(){
+                var dataObj={
+                    currentWidth : 0
+                }
+                var handleHideProgressBar = function(){
+                    var pbar = document.getElementsByClassName("pageLoading");
+                    if (pbar){
+                        console.log(pbar[0].offsetWidth);
+                        pbar[0].style.width = pbar[0].offsetWidth;
+                        pbar[0].className = "pageLoading pgLoadAnim2";
+                    }
+                    setTimeout(function(){document.getElementById("initialLoadingPbar").remove();},200)
+                }
+                window.addEventListener("hideProgressBar",handleHideProgressBar);
+                //window.dispatchEvent(new Event("hideProgressBar")); // - to hide progressbar
+            })();
+            
+        </script>
+        <div class="progress">
+            <div class="pageLoading pgLoadAnim1" style="width: 0px;"></div>
+        </div>
+    </div> <!-- ProgressBar End -->
+    </body>
+</html>
