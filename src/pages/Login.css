@@ -13,7 +13,7 @@
     justify-content: flex-end;
 }
 
-.loginForm{
+#loginForm{
     max-width: 50%;
 }
 

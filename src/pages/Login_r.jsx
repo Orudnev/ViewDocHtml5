@@ -8,17 +8,18 @@ import locale from '../Locale.js';
 import Checkbox from '../components/CheckBox.jsx';
 import ut from '../utils/Cutil.js';
 
-/*
+
 class Login extends React.Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+        console.log('LoginPage:',props)
         this.appSet = ut.pStorage.getAppSettings();
         this.state = {
-            user:this.appSet.user,
-            password:this.appSet.password,
-            rememberCredentials:this.appSet.rememberCredentials,
-            btnSubmitDisabled:!this.appSet.user || !this.appSet.password
+            user:props.user,
+            password:props.password,
+            rememberCredentials:props.rememberCredentials,
+            btnSubmitDisabled:!props.user || !props.password
         }
         this.handleChangeRCred = this.handleChangeRCred.bind(this);
         this.handleChangeText = this.handleChangeText.bind(this);
@@ -43,11 +44,14 @@ class Login extends React.Component {
 
     handleClick = event => {
         event.preventDefault();
-        this.appSet.rememberCredentials = this.state.rememberCredentials;
-        this.appSet.user = this.state.user;
-        this.appSet.password = this.state.password;
-        ut.pStorage.setAppSettings(this.appSet);
-        this.props.history.push(Enum.routes.pgSelectDD);        
+        console.log('props:',this.props);
+        console.log('state:',this.state);
+        this.props.onSubmit(this.state);
+        //this.appSet.rememberCredentials = this.state.rememberCredentials;
+        //this.appSet.user = this.state.user;
+        //this.appSet.password = this.state.password;
+        //ut.pStorage.setAppSettings(this.appSet);
+        //this.props.history.push(Enum.routes.pgSelectDD);        
     }
 
 
@@ -55,7 +59,7 @@ class Login extends React.Component {
     render() {
         return (
             <main id="login">
-                <form onSubmit={this.onSubmit} className="loginForm-container">
+                <form className="loginForm-container">
                     <div id="loginForm" className="panel panel-primary ">
                         <div className="panel-heading">
                             <h3 className="panel-title">
@@ -104,8 +108,9 @@ class Login extends React.Component {
         );
     }
 }
-*/ 
+ 
 
+/*
 function Out(props) {
     console.log('props',props);
     return (
@@ -152,5 +157,5 @@ function Out(props) {
                 </form>
             </main>    );
 }
- 
-export default Out;
+ */
+export default Login;
