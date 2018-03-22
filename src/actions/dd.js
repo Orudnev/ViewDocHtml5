@@ -5,7 +5,7 @@ export const DFDD_REQUEST_DSNLIST = 'DFDD_REQUEST_DSNLIST';
 export const DFDD_GET_DSNLIST = 'DFDD_GET_DSNLIST';
 export const DUMMY = 'DUMMY';
 
-export function GetMyDSNs(userName){
+export function getMyDSNs(userName){
     return dispatch => {
         dispatch({
             type: DFDD_REQUEST_DSNLIST 
@@ -14,10 +14,10 @@ export function GetMyDSNs(userName){
         axios.defaults.headers.post['Content-Type'] = 'text/xml';
         return axios.post('/DFStorageServer',strXmlSoap)
             .then(response => {
-                console.log(response.data);
+                let respObj = soapWrapper.getDataFromSoapResponse(response.data,null);
                 dispatch({
                     type: DFDD_GET_DSNLIST,
-                    data: response.data
+                    payload: respObj
                 })
             })
             .catch(error=> {

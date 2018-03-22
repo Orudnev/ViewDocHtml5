@@ -38,6 +38,7 @@ class SoapWrapper {
         return rv;
     }
 
+
     getDataFromSoapResponse(strSoapResponse,specialParseHandler){
         var xmldoc=new DOMParser().parseFromString(strSoapResponse,"text/xml");    
         var returnNodes =  xmldoc.getElementsByTagName("return");

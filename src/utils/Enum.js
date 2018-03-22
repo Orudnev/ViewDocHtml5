@@ -10,6 +10,11 @@ var Enum = {
         pgDfArea:'/dfArea/:rootArea',
         pgDFroot:'' 
     },
+    stage: {
+        none:'none',
+        loading:'loading',
+        loaded:'loaded'
+    },
     appSet : {
         user : 'user',
         password :'password',

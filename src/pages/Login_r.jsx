@@ -44,14 +44,7 @@ class Login extends React.Component {
 
     handleClick = event => {
         event.preventDefault();
-        console.log('props:',this.props);
-        console.log('state:',this.state);
         this.props.onSubmit(this.state);
-        //this.appSet.rememberCredentials = this.state.rememberCredentials;
-        //this.appSet.user = this.state.user;
-        //this.appSet.password = this.state.password;
-        //ut.pStorage.setAppSettings(this.appSet);
-        //this.props.history.push(Enum.routes.pgSelectDD);        
     }
 
 
@@ -110,52 +103,5 @@ class Login extends React.Component {
 }
  
 
-/*
-function Out(props) {
-    console.log('props',props);
-    return (
-            <main id="login">
-                <form className="loginForm-container">
-                    <div id="loginForm" className="panel panel-primary ">
-                        <div className="panel-heading">
-                            <h3 className="panel-title">
-                                <span id="dwcLabel" className="glyphicon glyphicon-flash">
-                                </span>
-                                {locale.loginPage_ConnectToServer}
-                            </h3>
-                        </div>  
-                        <div className="panel-body">
-                            <div className="form-group">
-                                <label className="labelDlg" >{locale.loginPage_UserName}</label>
-                                <input className="pull-right"
-                                    type="text"
-                                    datafield="user"
-                                    value={props.user} />
-                            </div>    
-                            <div className="form-group ">
-                                <div >
-                                <label className="labelDlg" >{locale.loginPage_Password}</label>
-                                    <input className="pull-right"
-                                        type="password"
-                                        datafield="password"
-                                        value={props.password} />
-                                </div>
-                            </div>
-                            <div className="form-group ">
-                                <Checkbox caption={locale.loginPage_RememberCredentials} 
-                                checked={props.rememberCredentials}
-                                 />
-                            </div>    
-                            <div className="form-group ">
-                                <button type="submit" className="btn btn-primary btn-xs pull-right " 
-                                        >
-                                        {locale.loginPage_ConnectToServer}
-                                </button>
-                            </div>
-                        </div>    
-                    </div>
-                </form>
-            </main>    );
-}
- */
+
 export default Login;

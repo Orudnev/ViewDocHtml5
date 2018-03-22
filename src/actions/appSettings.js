@@ -10,11 +10,12 @@ export function setCredentials(credentials) {
     }
 }
 
+
 export function navigate(url){
     return {
         type:LOCATION_CHANGE,
         payload:{
-                pathname:'/ddd',
+                pathname:url,
                 search:'',
                 hash:'',
                 action:'PUSH',

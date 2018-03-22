@@ -2,12 +2,12 @@ import { combineReducers} from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import dd from './dd';
-import appSettigns from './appSettings';
+import appSettings from './appSettings';
 
 const reducer = combineReducers({
     routing: routerReducer,
     dd,
-    appSettigns
+    appSettings
 });
 
 export default reducer;

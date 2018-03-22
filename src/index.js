@@ -6,18 +6,18 @@ import { Router, Route, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import store from './store';
 import LoginContainer from './containers/LoginContainer';
+import SelectDDContainer from './containers/SelectDDContainer';
 import NotFound from './pages/NotFound';
 import {setCredentials, test} from './actions'
 
 const history = syncHistoryWithStore(hashHistory, store);
-store.dispatch(test({prop:'blablabla'}));
 store.dispatch(setCredentials());
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
         <Route exact path="/" component={LoginContainer} />
-        <Route path="/ddd" component={NotFound} />
+        <Route path="/SelectDD" component={SelectDDContainer} />
     </Router>
   </Provider>,
   document.getElementById('root'));
