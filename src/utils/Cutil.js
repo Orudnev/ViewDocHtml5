@@ -14,7 +14,7 @@ class PStorage{
                     password :'',
                     rememberCredentials : false,
                     Dsn:'',
-                    sessionId:''
+                    lastUrl:''
                 }    
             }
         }        

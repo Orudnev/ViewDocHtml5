@@ -116,6 +116,7 @@ class SoapWrapper {
     df_GetAreaMembers(sessionID,rootAreaId,handler){
         let strXmlSoap = this.getSoap('Directory_GetSnapshot',{SessionId:sessionID,Parent:rootAreaId});
         this.doSoapRequest(handler,strXmlSoap,function(node,outObject){
+            outObject.id = rootAreaId;
             outObject.areas = [];
             outObject.volumes = [];
             var xmldoc=new DOMParser().parseFromString(node.textContent,"text/xml");

@@ -1,13 +1,15 @@
 import { combineReducers} from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-import dd from './dd';
 import appSettings from './appSettings';
+import dd from './dd';
+import session from './session'
 
 const reducer = combineReducers({
     routing: routerReducer,
     dd,
-    appSettings
+    appSettings,
+    session
 });
 
 export default reducer;

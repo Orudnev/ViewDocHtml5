@@ -7,17 +7,20 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import store from './store';
 import LoginContainer from './containers/LoginContainer';
 import SelectDDContainer from './containers/SelectDDContainer';
+import DfItemGalleryContainer from './containers/DfItemGalleryContainer';
 import NotFound from './pages/NotFound';
-import {setCredentials, test} from './actions'
+import {setAppSettings, test} from './actions'
 
 const history = syncHistoryWithStore(hashHistory, store);
-store.dispatch(setCredentials());
+store.dispatch(setAppSettings());
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
         <Route exact path="/" component={LoginContainer} />
         <Route path="/SelectDD" component={SelectDDContainer} />
+        <Route path="/DF" component={DfItemGalleryContainer} />
+        <Route strict path="/DF/*" component={DfItemGalleryContainer} />
     </Router>
   </Provider>,
   document.getElementById('root'));

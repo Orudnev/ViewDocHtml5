@@ -29,7 +29,7 @@ class App extends Component {
     }
 
     readDFTree(){
-       soapWrapper.df_GetAreaMembers(this.appSet.sessionId,'dsfs',this.onAreaMembers);
+       soapWrapper.df_GetAreaMembers(this.appSet.sessionId,'',this.onAreaMembers);
     }
 
     onAreaMembers(bresult,data){

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setCredentials } from '../actions';
+import { setAppSettings } from '../actions';
 import { navigate } from '../actions';
 import Login from '../pages/Login_r';
 
@@ -13,7 +13,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return {
         onSubmit: (formState) => {
-            dispatch(setCredentials(formState));
+            dispatch(setAppSettings(formState));
             dispatch(navigate('/SelectDD'));
         }
     };

@@ -14,11 +14,14 @@ class SelectDD extends React.Component {
 
         this.rowGetter = this.rowGetter.bind(this);
         this.onDsnSelected = this.onDsnSelected.bind(this);
-        this.hanleBtnCancelClick = this.hanleBtnCancelClick.bind(this);
+        this.handleBtnOkClick = this.handleBtnOkClick.bind(this);
+        this.hanleBtnCancelClick = this.hanleBtnCancelClick.bind(this);        
     }
  
     getGridElement(){
         let rv = <div>Loading...</div>; 
+        if (this.props.session.loginInfo.stage === en.stage.loading)
+            return <div>Login...</div>;
         if (this.props.dd.dsnList && this.props.dd.dsnList.stage == en.stage.loaded){
             rv =  <ReactDataGrid 
                     columns={[{key:'Name',name:'DSN'}]}
@@ -49,6 +52,7 @@ class SelectDD extends React.Component {
     }
 
     handleBtnOkClick(){
+        this.props.onSubmit(this.props);
     }
 
     hanleBtnCancelClick(event){

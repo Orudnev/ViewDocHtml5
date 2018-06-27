@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { getMyDSNs } from '../actions';
 import { navigate } from '../actions';
 import SelectDD from '../pages/SelectDD_r';
-import { setCredentials } from '../actions';
+import { setAppSettings } from '../actions';
+import { login } from '../actions';
+
 import en from '../utils/Enum';
 
 function mapStateToProps(state) {
@@ -25,10 +27,10 @@ function mapDispatchToProps(dispatch){
             dispatch(navigate(en.routes.root));    
         },
         updateDsn:(newDsn) => {
-            dispatch(setCredentials({Dsn:newDsn}));
+            dispatch(setAppSettings({Dsn:newDsn}));
         },
         onSubmit: (formState) => {
-            dispatch(navigate('/SelectDD'));
+            dispatch(login(formState.appSettings));
         }
     };
 }
